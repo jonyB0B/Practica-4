@@ -36,7 +36,7 @@ var playGame = function() {
     // enemies.basic, pero con la propiedad x = 200 definida en el
     // segundo argumento de la llamada al constructor. Ver comentarios en el
     // constructor Enemy al final de este fichero.
-    board.add(new Enemy(enemies.basic, { x: 200 }));
+    board.add(new Enemy(enemies.basic, { x: 200}));
 
     board.add(new PlayerShip());
     Game.setBoard(3,board);
