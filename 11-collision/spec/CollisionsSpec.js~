@@ -84,3 +84,47 @@
     jugador, desaparece también.
 
 */
+
+
+describe("Clase EnemySpec", function(){
+
+    var canvas, ctx;
+
+    beforeEach(function(){
+	loadFixtures('index.html');
+
+	canvas = $('#game')[0];
+	expect(canvas).toExist();
+
+	ctx = canvas.getContext('2d');
+	expect(ctx).toBeDefined();
+
+	oldGame = Game;
+	SpriteSheet.load (sprites,function(){});
+    });
+
+    afterEach(function(){
+        Game = oldGame;
+    });
+	
+	it("Misil destruye nave y desaparece", function(){
+		var board = new GameBoard();
+		var misil = new PlayerMissile(100,100);
+		
+		var enemigo = new Enemy({x: 99, y: 90, sprite: 'enemy_purple', health: 10 });
+		
+		board.add(misil);
+		board.add(enemigo);
+		
+		var collision = board.collide(misil,OBJECT_ENEMY);
+		
+		board.step(0.01);
+			
+		expect(collision).toBe(enemigo);
+		expect(board.objects.length).toBe(1);
+		expect(enemigo.health).toBe(0);
+		expect(board.objects[0].sprite).toBe('explosion');
+	});
+	
+	
+});

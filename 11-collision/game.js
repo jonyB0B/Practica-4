@@ -279,6 +279,8 @@ Enemy.prototype.step = function(dt) {
     var collision = this.board.collide(this,OBJECT_PLAYER);
     if(collision) {
 	collision.hit(this.damage);
+	this.board.add(new Explosion(this.x + this.w/2, 
+                                     this.y + this.h/2));
 	this.board.remove(this);
     }
 
@@ -299,20 +301,25 @@ Enemy.prototype.hit = function(damage) {
 }
 
 var FireballLeft= function(x,y) {
-    this.setup('fireball',{ vy: -700 });
+    this.setup('fireball',{ vy: -700 ,damage: 20 });
     this.x = x - this.w/2; 
 
     this.y = y - this.h; 
 	this.vx = -89;
 };
 FireballLeft.prototype = new Sprite();
+FireballLeft.prototype.type = OBJECT_PLAYER_PROJECTILE;
 FireballLeft.prototype.step = function(dt)  {
     this.x += this.vx * dt;
     this.y += this.vy * dt;
 
 	this.vy = this.vy+20;
 
-    if(this.y > Game.height ||
+    var collision = this.board.collide(this,OBJECT_ENEMY);
+    if(collision) {
+	collision.hit(this.damage);
+	
+    } else if(this.y > Game.height ||
        this.x < -this.w||
        this.x > Game.width) {
 	this.board.remove(this);
@@ -320,20 +327,25 @@ FireballLeft.prototype.step = function(dt)  {
 };
 
 var FireballRigth= function(x,y) {
-    this.setup('fireball',{ vy: -700 });
+    this.setup('fireball',{ vy: -700,  damage: 20 });
     this.x = x - this.w/2; 
 
     this.y = y - this.h; 
 	this.vx = 89;
 };
 FireballRigth.prototype = new Sprite();
+FireballRigth.prototype.type = OBJECT_PLAYER_PROJECTILE;
 FireballRigth.prototype.step = function(dt)  {
     this.x += this.vx * dt;
     this.y += this.vy * dt;
 
 	this.vy = this.vy+20;
 
-    if(this.y > Game.height ||
+     var collision = this.board.collide(this,OBJECT_ENEMY);
+    if(collision) {
+	collision.hit(this.damage);
+	
+    } else if(this.y > Game.height ||
        this.x < -this.w||
        this.x > Game.width) {
 	this.board.remove(this);

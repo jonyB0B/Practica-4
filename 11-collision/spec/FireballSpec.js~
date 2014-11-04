@@ -31,10 +31,10 @@ it("draw",function(){
 
 it("step",function(){
 		var FireB = new FireballLeft(61,120);
-		var dt = 0.1;
+		var dt = 0.01;
 		FireB.step(dt);
 		expect (FireB.x).toBe(37.1); // No sabia igualar con componentes
-		expect (FireB.y).toBe(15);
+		expect (FireB.y).toBe(20);
 
 		var FireB2 = new FireballLeft(61,120);
 		FireB2.w = -81;

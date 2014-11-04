@@ -31,8 +31,8 @@ it("draw",function(){
 
 it("step",function(){
 		var FireB = new FireballLeft(61,120);
-		var dt = 0.1;
-		FireB.step(dt);
+		var dt = 0.01;
+		FireB.step(dt);// da error en esta spec
 		expect (FireB.x).toBe(37.1); // No sabia igualar con componentes
 		expect (FireB.y).toBe(20);
 
