@@ -4,7 +4,8 @@ var sprites = {
     enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 },
     enemy_bee: { sx: 79, sy: 0, w: 37, h: 43, frames: 1 },
     enemy_ship: { sx: 116, sy: 0, w: 42, h: 43, frames: 1 },
-    enemy_circle: { sx: 158, sy: 0, w: 32, h: 33, frames: 1 }
+    enemy_circle: { sx: 158, sy: 0, w: 32, h: 33, frames: 1 },
+	fireball: { sx: 0, sy: 64, w: 35, h: 35, frames: 1 }
 };
 
 
@@ -141,8 +142,26 @@ var PlayerShip = function() {
 	else if(this.x > Game.width - this.w) { 
 	    this.x = Game.width - this.w 
 	}
-
 	this.reload-=dt;
+	//añado la bola de fuego 
+
+	if(Game.keys['b'] && this.reload < 0) {
+	    // Esta pulsada la tecla de disparo y ya ha pasado el tiempo reload
+	    this.reload = this.reloadTime;
+
+	    // Se añaden al gameboard 2 misiles 
+	    this.board.add(new FireballLeft(this.x,this.y+this.h/2));
+	}
+
+	if(Game.keys['n'] && this.reload < 0) {
+	    // Esta pulsada la tecla de disparo y ya ha pasado el tiempo reload
+	    this.reload = this.reloadTime;
+
+	    // Se añaden al gameboard 2 misiles 
+	    this.board.add(new FireballRigth(this.x+this.w,this.y+this.h/2));
+	}
+
+
 	if(Game.keys['fire'] && this.reload < 0) {
 	    // Esta pulsada la tecla de disparo y ya ha pasado el tiempo reload
 	    Game.keys['fire'] = false;
@@ -279,7 +298,59 @@ Enemy.prototype.draw = function(ctx) {
     SpriteSheet.draw(ctx,this.sprite,this.x,this.y);
 }
 
+var FireballLeft= function(x,y) {
+    this.w = SpriteSheet.map['fireball'].w;
+    this.h = SpriteSheet.map['fireball'].h;
+    this.x = x - this.w/2; 
 
+    this.y = y - this.h; 
+    this.vy = -700;
+	this.vx = -89;
+};
+
+FireballLeft.prototype.step = function(dt)  {
+    this.x += this.vx * dt;
+    this.y += this.vy * dt;
+
+	this.vy = this.vy+20;
+
+    if(this.y > Game.height ||
+       this.x < -this.w||
+       this.x > Game.width) {
+	this.board.remove(this);
+    }
+};
+
+FireballLeft.prototype.draw = function(ctx)  {
+    SpriteSheet.draw(ctx,'fireball',this.x,this.y);
+};
+
+var FireballRigth= function(x,y) {
+    this.w = SpriteSheet.map['fireball'].w;
+    this.h = SpriteSheet.map['fireball'].h;
+    this.x = x - this.w/2; 
+
+    this.y = y - this.h; 
+    this.vy = -700;
+	this.vx = +89;// cambio el parametro de x para que sea simetrico
+};
+
+FireballRigth.prototype.step = function(dt)  {
+    this.x += this.vx * dt;
+    this.y += this.vy * dt;
+
+	this.vy = this.vy+20;
+
+    if(this.y > Game.height ||
+       this.x < -this.w||
+       this.x > Game.width) {
+	this.board.remove(this);
+    }
+};
+
+FireballRigth.prototype.draw = function(ctx)  {
+    SpriteSheet.draw(ctx,'fireball',this.x,this.y);
+};
 
 $(function() {
     Game.initialize("game",sprites,startGame);
