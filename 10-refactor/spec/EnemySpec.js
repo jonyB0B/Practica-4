@@ -1,7 +1,6 @@
 /*
 
   Requisitos:
-
   El objetivo de este prototipo es añadir al juego naves enemigas. Las
   naves se añadirán al tablero de juegos (objeto GameBoard) al igual
   que el resto de los elementos del juego (nave del jugador y
@@ -60,4 +59,61 @@
      propiedades de la plantilla.
 
 */
+
+
+describe("Clase EnemySpec", function(){
+
+    var canvas, ctx;
+
+    beforeEach(function(){
+	loadFixtures('index.html');
+
+	canvas = $('#game')[0];
+	expect(canvas).toExist();
+
+	ctx = canvas.getContext('2d');
+	expect(ctx).toBeDefined();
+
+	oldGame = Game;
+	SpriteSheet.load (sprites,function(){});
+    });
+
+    afterEach(function(){
+        Game = oldGame;
+    });
+
+	it("draw",function(){
+		spyOn(SpriteSheet,"draw");
+		var enemy = new Enemy(enemies.basic);
+		enemy.draw()
+		expect(SpriteSheet.draw).toHaveBeenCalled();
+		expect(SpriteSheet.draw.calls[0].args[1]).toEqual(enemy.sprite);
+		expect(SpriteSheet.draw.calls[0].args[2]).toEqual(enemy.x);
+		expect(SpriteSheet.draw.calls[0].args[3]).toEqual(enemy.y);
+
+	});
+
+	it("step",function(){
+		var enemy = new Enemy(enemies.basic);
+		var dt = 0.5;
+		enemy.step(dt);
+		var componentex = (enemy.vx * dt)+enemies.basic.x;
+		var componentey = (enemy.vy * dt)+enemies.basic.y;
+		expect (enemy.x).toBe(componentex);
+		expect (enemy.y).toBe(componentey);
+
+
+		var enemy2 = new Enemy(enemies.basic);
+		enemy2.w = -81;
+		enemy2.x= 21;
+		enemy2.board = {remove:function(){}};
+		spyOn(enemy2.board,"remove");
+		enemy2.step(dt);
+		expect(enemy2.board.remove).toHaveBeenCalled();
+
+	});
+
+});
+
+
 
