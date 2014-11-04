@@ -84,28 +84,3 @@
     jugador, desaparece también.
 
 */
-
-
-describe("Clase EnemySpec", function(){
-
-    var canvas, ctx;
-
-    beforeEach(function(){
-	loadFixtures('index.html');
-
-	canvas = $('#game')[0];
-	expect(canvas).toExist();
-
-	ctx = canvas.getContext('2d');
-	expect(ctx).toBeDefined();
-
-	oldGame = Game;
-	SpriteSheet.load (sprites,function(){});
-    });
-
-    afterEach(function(){
-        Game = oldGame;
-    });
-	
-	
-});

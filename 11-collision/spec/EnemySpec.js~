@@ -93,7 +93,25 @@ describe("Clase EnemySpec", function(){
 
 	});
 
-	// añadir step
+	it("step",function(){
+		var enemy = new Enemy(enemies.basic);
+		var dt = 0.5;
+		enemy.step(dt);
+		var componentex = (enemy.vx * dt)+enemies.basic.x;
+		var componentey = (enemy.vy * dt)+enemies.basic.y;
+		expect (enemy.x).toBe(componentex);
+		expect (enemy.y).toBe(componentey);
+
+
+		var enemy2 = new Enemy(enemies.basic);
+		enemy2.w = -81;
+		enemy2.x= 21;
+		enemy2.board = {remove:function(){}};
+		spyOn(enemy2.board,"remove");
+		enemy2.step(dt);
+		expect(enemy2.board.remove).toHaveBeenCalled();
+
+	});
 
 });
 
