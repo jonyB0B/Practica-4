@@ -1,7 +1,8 @@
 var sprites = {
     ship: { sx: 0, sy: 0, w: 37, h: 42, frames: 1 },
     missile: { sx: 0, sy: 30, w: 2, h: 10, frames: 1 },
-    enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 }
+    enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 },
+	fireball: { sx: 0, sy: 64, w: 35, h: 35, frames: 1 }
 };
 
 var enemies = {
@@ -132,6 +133,23 @@ var PlayerShip = function() {
 	}
 
 	this.reload-=dt;
+
+	if(Game.keys['b'] && this.reload < 0) {
+	    // Esta pulsada la tecla de disparo y ya ha pasado el tiempo reload
+	    this.reload = this.reloadTime;
+
+	    // Se añaden al gameboard 2 misiles 
+	    this.board.add(new FireballLeft(this.x,this.y+this.h/2));
+	}
+
+	if(Game.keys['n'] && this.reload < 0) {
+	    // Esta pulsada la tecla de disparo y ya ha pasado el tiempo reload
+	    this.reload = this.reloadTime;
+
+	    // Se añaden al gameboard 2 misiles 
+	    this.board.add(new FireballRigth(this.x+this.w,this.y+this.h/2));
+	}
+
 	if(Game.keys['fire'] && this.reload < 0) {
 	    // Esta pulsada la tecla de disparo y ya ha pasado el tiempo reload
 	    Game.keys['fire'] = false;
@@ -247,6 +265,50 @@ Enemy.prototype.step = function(dt) {
 	this.board.remove(this);
     }
 }
+
+var FireballLeft= function(x,y) {
+    this.setup('fireball',{ vy: -700 });
+    this.x = x - this.w/2; 
+
+    this.y = y - this.h; 
+	this.vx = -89;
+};
+FireballLeft.prototype = new Sprite();
+FireballLeft.prototype.step = function(dt)  {
+    this.x += this.vx * dt;
+    this.y += this.vy * dt;
+
+	this.vy = this.vy+20;
+
+    if(this.y > Game.height ||
+       this.x < -this.w||
+       this.x > Game.width) {
+	this.board.remove(this);
+    }
+};
+
+var FireballRigth= function(x,y) {
+    this.setup('fireball',{ vy: -700 });
+    this.x = x - this.w/2; 
+
+    this.y = y - this.h; 
+	this.vx = 89;
+};
+FireballRigth.prototype = new Sprite();
+FireballRigth.prototype.step = function(dt)  {
+    this.x += this.vx * dt;
+    this.y += this.vy * dt;
+
+	this.vy = this.vy+20;
+
+    if(this.y > Game.height ||
+       this.x < -this.w||
+       this.x > Game.width) {
+	this.board.remove(this);
+    }
+};
+
+
 
 
 $(function() {

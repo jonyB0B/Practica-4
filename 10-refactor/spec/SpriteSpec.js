@@ -18,7 +18,7 @@ describe("Clase Sprite", function(){
 
 	ctx = canvas.getContext('2d');
 	expect(ctx).toBeDefined();
-	
+	SpriteSheet.load (sprites,function(){});
 	oldGame = Game;
     });
 
@@ -40,10 +40,10 @@ describe("Clase Sprite", function(){
 	});
 
 	it("setup", function(){
-		var Esprait = new Enemy(5,132);
-		spyOn(SpriteSheet,"merge");
-		Esprait.setup(Esprait.sprite,{x:100});
-		expect(SpriteSheet.merge).toHaveBeenCalled();
+		var nave = new PlayerShip();
+		spyOn(nave,"merge");
+		nave.setup(nave.sprite);
+		expect(nave.merge).toHaveBeenCalled();
 
 	});
 });
