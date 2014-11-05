@@ -27,7 +27,6 @@
 <script type="text/javascript" src="spec/FireballSpec.js"></script>
 <script type="text/javascript" src="spec/SpriteSpec.js"></script>
 <script type="text/javascript" src="spec/CollisionsSpec.js"></script>
-<script type="text/javascript" src="spec/LevelSpec.js"></script>
 
 
   <script type="text/javascript">

@@ -36,7 +36,7 @@ var enemies = {
     step:     { x: 0,   y: -50, sprite: 'enemy_circle', health: 10,
 		B: 150, C: 1.2, E: 75 },
 	serpient:     { x: 100,   y: -50, sprite: 'enemy_circle', health: 30,
-		B: 50, C: 4,E: 100 }
+		E: 100 }
 };
 
 
