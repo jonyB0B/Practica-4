@@ -91,7 +91,43 @@ it("Generar nivel", function(){
         	expect(nivel.levelData.length).toBe(level.length);
         	expect(nivel).toBeDefined();
         });
-        
-});   
 
+it("Level step", function(){
+
+	var callback = function() {};
+	var level = [
+	  //  Comienzo, Fin,   Frecuencia,  Tipo,       Override
+		[ 0, 4000, 500, 'step' ],
+		[ 6000, 13000, 800, 'ltr' ],
+		[ 10000, 16000, 400, 'circle' ],
+		[ 17800, 20000, 500, 'straight', { x: 50 } ],
+		[ 18200, 20000, 500, 'straight', { x: 90 } ],
+		[ 18200, 20000, 500, 'straight', { x: 10 } ],
+		[ 22000, 25000, 400, 'wiggle', { x: 150 } ],
+		[ 22000, 25000, 400, 'wiggle', { x: 100 } ]
+			];
+	var nivel = new Level(level, callback);
+	var board = new GameBoard();
+	board.add(nivel);
+	var dt = 1;
+	spyOn(nivel.board, "add");
+	spyOn(nivel, "callback");
+            
+        nivel.step(dt);
+   	// Actualizamos el tiempo que ha pasado 
+	expect(nivel.t).toBe(dt*1000);
+	expect(nivel.levelData.length).toBe(level.length);
+	expect(nivel.callback).not.toHaveBeenCalled();                       
+
+	//comprobamos si pasando el tiempo el nivel cambia 
+	nivel.board.add.reset();
+	nivel.t = 11000;
+	nivel.step(dt);
+	expect(nivel.t).toBe(11000 + dt*1000);
+	expect(nivel.levelData.length).toBe(level.length-1);
+	expect(nivel.callback).not.toHaveBeenCalled();
+
+        });  
+        
+});
 
