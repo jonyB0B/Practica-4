@@ -86,7 +86,7 @@
 */
 
 
-describe("Clase EnemySpec", function(){
+describe("Clase Collision", function(){
 
     var canvas, ctx;
 
@@ -107,6 +107,80 @@ describe("Clase EnemySpec", function(){
         Game = oldGame;
     });
 	
+it("Misil destruye el enemigo",function(){
+	var board = new GameBoard()
+	var misil = new PlayerMissile(100,100);
+	var enemigo = new Enemy({x: 99, y: 90, sprite: 'enemy_purple', health: 10 });
+	//añadimos los elementos al gameboard
+	board.add(misil);
+	board.add(enemigo);
+
+	var collision = board.collide(misil,OBJECT_ENEMY);
+	board.step(0.01);
+	//comprobamos
+	expect(collision).toBe(enemigo);
+	expect(board.objects.length).toBe(1);
+	expect(board.objects[0].sprite).toBe('explosion');
+});
+
+
+
+
+it("Misil no destruye nave, la daña y desaparece misil", function(){
+		var board = new GameBoard()
+		var misil= new PlayerMissile(100,100);
+		var enemigo = new Enemy({ x: 99, y: 90, sprite: 'enemy_purple', health: 20 });//aumentamos la vida a 20 para comprobar que no la destruye 
+
+		board.add(misil);
+		board.add(enemigo);
+		
+		var collision =board.collide(misil,OBJECT_ENEMY);
+		board.step(0.01);
+		//comprobamos
+		expect(collision).toBe(enemigo);
+		expect(enemigo.health).toBe(10);
+		expect(board.objects.length).toBe(1);
+	});
+
+it("Fireball destruye enemigo, y continua", function(){
+		var board = new GameBoard()
+		var FireB = new FireballLeft(200,200,1);
+		//En este caso creamos una bola de fuego en lugar del misil
+		var enemigo = new Enemy({x: 168, y: 136, sprite: 'enemy_purple', health: 10 });
+		//creamos un enemigo cualquiera
+		
+		board.add(FireB);
+		board.add(enemigo);
+		
+		var collision =board.collide(FireB,OBJECT_ENEMY);
+		board.step(0.01);
+		//comprobamos
+		expect(collision).toBe(enemigo);
+		expect(board.objects.length).toBe(2);
+		expect(board.objects[0].sprite).toBe('fireball');
+		expect(board.objects[1].sprite).toBe('explosion');
+	});
+	
+
+it("Colisionan nave y enemigo y desaparecen los dos", function(){
+		var board = new GameBoard()
+		var nave= new PlayerShip();
+		//nuestro "misil" en este caso es la propia nave del jugador 
+		var enemigo = new Enemy({ x: 141.5, y: 428, sprite: 'enemy_purple', health: 20 });
+
+	
+		board.add(nave);
+		board.add(enemigo);
+			
+		var collision = board.collide(nave,OBJECT_ENEMY);
+		//En este caso realizamos el mismo procedimiento que en los anteriores
+		board.step(0.01);
+		//comprobamos
+		expect(collision).toBe(enemigo);
+		expect(board.objects.length).toBe(1);
+		expect(board.objects[0].sprite).toBe('explosion');//se produce la explosion
+		
+	});
 	
 	
 });

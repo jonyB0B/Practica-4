@@ -29,7 +29,26 @@ it("draw",function(){
 		expect(SpriteSheet.draw.calls[0].args[3]).toEqual(FireB.y);
 	});
 
+it("step",function(){
+		var FireB = new FireballLeft(61,120);
+		var dt = 0.01;
+		FireB.board = {remove: function(){}, collide: function() {}};
+		FireB.step(dt);// da error en esta spec
+		expect (FireB.x).toBe(45.11); // No sabia igualar con componentes
+		expect (FireB.y).toBe(83);
 
+		var FireB2 = new FireballLeft(61,120);
+		FireB2.w = -81;
+		FireB2.x= 21;
+		FireB2.board = {remove: function(){}, collide: function() {}};
+		spyOn(FireB2.board,"remove");
+		FireB2.step(dt);
+		expect(FireB2.board.remove).toHaveBeenCalled();
+
+
+		
+
+	});
 
 
 });
