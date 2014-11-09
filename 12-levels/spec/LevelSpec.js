@@ -1,3 +1,4 @@
+
 /*
 
   Requisitos:
@@ -51,3 +52,46 @@
         el nivel ni enemigos en el tablero de juegos.
 
 */
+
+describe("LevelSpec", function() {
+        
+	var canvas, ctx;
+
+   	beforeEach(function(){
+	loadFixtures('index.html');
+
+	canvas = $('#game')[0];
+	expect(canvas).toExist();
+
+	ctx = canvas.getContext('2d');
+	expect(ctx).toBeDefined();
+
+	oldGame = Game;
+	SpriteSheet.load (sprites,function(){});
+    });
+
+    afterEach(function(){
+        Game = oldGame;
+    });
+        
+        
+it("Generar nivel", function(){
+		var callback = function() {};
+		var level = [
+  //  Comienzo, Fin,   Frecuencia,  Tipo,       Override
+	[ 0,        4000,  200,         'serpient'                 ],
+    [ 0,        4000,  500,         'step'                 ],
+    [ 6000,     13000, 800,         'ltr'                  ],
+    [ 10000,    16000, 400,         'circle'               ],
+    [ 22000,    25000, 400,         'wiggle',   { x: 150 } ],
+    [ 22000,    25000, 400,         'wiggle',   { x: 100 } ]
+];
+        	var nivel = new Level(level, callback);
+        	expect(nivel.callback).toBe(callback);
+        	expect(nivel.levelData.length).toBe(level.length);
+        	expect(nivel).toBeDefined();
+        });
+        
+});   
+
+
